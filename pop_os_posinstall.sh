@@ -44,8 +44,8 @@ LOG_INSTALL="$HOME_USER/loginstall.txt"
 
 PROG_INSTALL=(
     pciutils
-    grub-customizer
-    progress
+    #grub-customizer
+    #progress
     vim
     linux-headers-`uname -r`
     gcc
@@ -57,7 +57,7 @@ PROG_INSTALL=(
     apt-transport-https
     neofetch
     flameshot
-    most
+    #most
     chrome-gnome-shell
     gnome-tweaks
     build-essential
@@ -253,7 +253,7 @@ colocar dentro de plugins => zsh-autosuggestions
 
 
 ### --> Pacotes Flatpack
-flatpak install spotify anydesk discord telegram warpinator -y
+#flatpak install spotify anydesk discord telegram warpinator -y
 echo "Instalando programas Flatpak"
 eval sudo -u "$NOME_USER" flatpak install anydesk discord telegram spotify warpinator -y "$DEV_NULL"
 
