@@ -76,6 +76,7 @@ PROG_INSTALL=(
     grub2-common
     grub-pc-bin
     zsh
+    vagrant
 )
 
 PROG_REMOVE=(
@@ -83,7 +84,7 @@ PROG_REMOVE=(
     gnome-contacts
     gnome-weather
     geary
-    totem-*
+    totem-common
     simple-scan
     firefox*
 )
@@ -119,6 +120,7 @@ for REMOVE in "${PROG_REMOVE[@]}"; do
 done
 echo "Limpando..."
 apt autoclean -y "$DEV_NULL"
+apt autoremove -y "$DEV_NULL"
 
 cd /tmp
 
@@ -175,6 +177,7 @@ echo "Instalando Virtual Box..."
 wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | eval apt-key add - "$DEV_NULL"
 wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | eval apt-key add - "$DEV_NULL"
 eval apt update "$DEV_NULL" && eval apt install virtualbox -y "$DEV_NULL"
+#usermod -aG vboxusers $NOME_USER
 #Deu certo!
 [ -e "$(which virtualbox)" ] && echo "VirtualBox Instalado com sucesso!" >> $LOG_INSTALL || echo "Falha na instalação do VirtualBox" >> $LOG_INSTALL
 
@@ -206,6 +209,13 @@ sudo -u "$NOME_USER" xdg-mime default nemo.desktop inode/directory application/x
 gsettings set org.gnome.desktop.background show-desktop-icons false && \
 gsettings set org.nemo.desktop show-desktop-icons true && \
 eval xdg-mime query default inode/directory "$DEV_NULL"
+
+#novo 2023
+#xdg-mime query default inode/directory
+#gsettings set org.gnome.desktop.background show-desktop-icons false
+#xdg-mime default nemo.desktop inode/directory application/x-gnome-saved-search
+#gsettings set org.nemo.desktop show-desktop-icons true
+#xdg-mime query default inode/directory
 
 if [ "$?" = "0" ]; then
     echo "Neno é seu gerenciador de arquivos padrao" >> $LOG_INSTALL
@@ -252,12 +262,13 @@ colocar dentro de plugins => zsh-autosuggestions
 
 
 
-### --> Pacotes Flatpack
+### --> Pacotes Flatpackb
 #flatpak install spotify anydesk discord telegram warpinator -y
 echo "Instalando programas Flatpak"
-eval sudo -u "$NOME_USER" flatpak install anydesk discord telegram spotify warpinator -y "$DEV_NULL"
+eval sudo -u "$NOME_USER" flatpak install anydesk discord telegram spotify warpinator bitwarden  -y "$DEV_NULL"
 
-
+### --> SimpleScreenRecorder
+#sudo apt-add-repository ppa:maarten-baert/simplescreenrecorder
 
 
 
@@ -269,7 +280,7 @@ eval sudo -u "$NOME_USER" flatpak install anydesk discord telegram spotify warpi
 #   apt install grub-efi grub2-common -y && grub-install
 #   
 #   if [ "$?" = "0"]; then
-#   cp /boot/grub/x86_64-efi/grub.efi /boot/efi/EFI/pop/grubx64.efi
+#   cp /boot/grub/x86_64-efi/grub.efi /boot/efi/EFI/pop/grubx64.efi 
 #   echo "Grub corrigido com sucesso!, adicione no Grub Customizer, \
 #   acesse Arquivos->Alterar ambiente e em OUTPUT_FIle, adicione a linha: \
 #   /boot/efi/EFI/pop/grub.cfg" >> $LOG_INSTALL
@@ -299,3 +310,6 @@ if [ "$VALOR" = "S" -o "$VALOR" = "s" ]; then
 else
     echo "Assim que possivel reinicia o computador para concluir a instalação"
 fi
+
+#Alterar terminal padrao teste
+sudo update-alternatives --config x-terminal-emulator
